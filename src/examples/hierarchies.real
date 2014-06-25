@@ -1,0 +1,57 @@
+# Example circuit demonstrating RevLib 2.0 features
+.version 2.0
+.numvars 10
+.variables x1 x2 x3 x4 x5 x6 x7 x8 x9 x10
+.inputs reset c_0 c_1 0 0 1 0 0 0 0
+.outputs - c_0 c_1 - - - - - - -
+.constants ---0010000
+.garbage 1--1111111
+.state c x2 x3
+.outputbus c' x2 x3
+.module swap2
+  .numvars 4
+  .variables x1 x2 x3 x4
+  .inputs c_0 c_1 0 0
+  .outputs c_0 c_1 - -
+  .constants --00
+  .garbage --11
+  .inputbus c x1 x2
+  .outputbus c x1 x2
+  .begin
+  f2 x1 x3
+  f2 x2 x4
+  .end
+
+.module adder2
+  .numvars 7
+  .variables x1 x2 x3 x4 x5 x6 x7
+  .inputs a_0 a_1 b_0 b_1 cin 0 0
+  .outputs - - - - sum0 sum1 cout
+  .constants -----00
+  .garbage 1111---
+  .inputbus a x1 x2
+  .inputbus b x3 x4
+  .outputbus sum x5 x6
+  .module adder1
+    .numvars 4
+    .variables x1 x2 x3 x4
+    .inputs a b cin 0
+    .outputs - - sum cout
+    .constants ---0
+    .garbage 11--
+    .begin
+    t3 x2 x1 x4
+    t2 x1 x2
+    t3 x3 x2 x4
+    t2 x2 x3
+    .end
+  .begin
+  adder1 x1 x3 x5 x6
+  adder1 x2 x4 x6 x7
+  .end
+.begin
+swap2 x1 x2 x3 x4 x5 #@ comment="Set c to 0 if reset = 1"
+t1 x1
+adder2 x1 x2 x3 x6 x7 x8 x9 x10 #@ comment="Add 1 to c if reset = 0"
+swap2 x1 x2 x3 x8 x9 #@ comment="Move result of addition to c"
+.end
