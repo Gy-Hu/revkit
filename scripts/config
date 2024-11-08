@@ -54,7 +54,7 @@ BUILDTOOL="make.py"
 
 DEPENDENCIES_DIR=$ROOT_DIR/dependencies
 DEPS=$(mk_and_abs_dir $DEPENDENCIES_DIR) 
-GIT_REPO="git://github.com/msoeken/dependencies.git"
+GIT_REPO="https://github.com/Gy-Hu/dependencies.git"
 GIT_OPT="-b revkit"
 INSTALLER_DIR=installer
 
